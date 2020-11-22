@@ -132,7 +132,8 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 53840578ff91        debian              "bash --version"    4 minutes ago       Exited (0) 4 minutes ago                        amazing_gates
 31128144e7d9        hello-world         "/hello"            24 minutes ago      Exited (0) 24 minutes ago                       practical_feynman
 
-O --rm remove da lista, assim ao chamr o run e incluir o --rm ele exclui este ultimo run (bo caso debian) então a lista permanece igual.
+O --rm remove da lista, assim ao chamr o run e incluir o --rm ele exclui este ultimo run (bo caso debian) então a lista permanece 
+igual.
 C:\Users\Aldo>docker container run --rm debian
 
 C:\Users\Aldo>docker container run --rm debian bash --version
@@ -143,8 +144,8 @@ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software; you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-O metodo run sempre cria um novo container ao ser utilizado, então ao utilizar o -it (seria -i-interativo; e -t-terminal) para termos acesso
-ao terminal do container. 
+O metodo run sempre cria um novo container ao ser utilizado, então ao utilizar o -it (seria -i-interativo; e -t-terminal) para 
+termos acesso ao terminal do container. 
 
 C:\Users\Aldo>docker container run -it debian bash
 root@d6cc08e7b7ad:/#
@@ -207,8 +208,8 @@ bin  boot  curso-docker.txt  dev  etc  home  lib  lib64  media  mnt  opt  proc  
 root@4c365e146d03:/# exit
 exit
 
-Isolamento controlado, podendo expor uma porta para troca de arquivos. Assim é possível mapear portas, e para isto baixamos um servidor
-nginx. 
+Isolamento controlado, podendo expor uma porta para troca de arquivos. Assim é possível mapear portas, e para isto baixamos 
+um servidor nginx. 
 
 C:\Users\Aldo>docker container run -p 8080:80 nginx
 Unable to find image 'nginx:latest' locally
