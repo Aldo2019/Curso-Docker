@@ -304,7 +304,16 @@ docker: Error response from daemon: create $(pwd)/not-found: "$(pwd)/not-found" 
 only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed. If you intended to pass a host directory, use absolute path.
 See 'docker run --help'.
 
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container run -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html nginx
+docker: Error response from daemon: create $(pwd)/html: "$(pwd)/html" includes invalid characters for a local volume name, 
+only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed. If you intended to pass a host directory, use absolute path.
+See 'docker run --help'.
 
+Rodar um servidor web em backgraound: executar o container em background, modo de uso do docker como um processo por exemplo:
+servidor web, banco de dados, etc. Assim não temos a interatividade direto, assim usamos: -d modo dinamo, digitando o comando no 
+terminal dentro da pasta.
+
+docker container run -d --name ex-daemon-basic -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html nginx
 
 
 
