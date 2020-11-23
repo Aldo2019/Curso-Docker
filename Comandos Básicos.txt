@@ -304,19 +304,157 @@ docker: Error response from daemon: create $(pwd)/not-found: "$(pwd)/not-found" 
 only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed. If you intended to pass a host directory, use absolute path.
 See 'docker run --help'.
 
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container run -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html nginx
+docker: Error response from daemon: create $(pwd)/html: "$(pwd)/html" includes invalid characters for a local volume name, 
+only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed. If you intended to pass a host directory, use absolute path.
+See 'docker run --help'.
+
+Rodar um servidor web em backgraound: executar o container em background, modo de uso do docker como um processo por exemplo:
+servidor web, banco de dados, etc. Assim não temos a interatividade direto, assim usamos: -d modo dinamo, digitando o comando no 
+terminal dentro da pasta.
+
+docker container run -d --name ex-daemon-basic -p 8080:80 -v $(pwd)/html:/usr/share/nginx/html nginx
+
+Para windows devemos trocar o $(pwd) por %cd%:
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container run -p 8080:80 -v %cd%/not-found:/usr/share/nginx/html nginx
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+
+Chamamos um arquivo html e pedimos para apontar para ele: direcionamos uma pasta do computador host para o container.
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container run -p 8080:80 -v %cd%/html:/usr/share/nginx/html nginx
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>
+docker container run -d --name ex-daemon-basic -p 8080:80 -v %cd%/html:/usr/share/nginx/html nginx
+0e3e2994e17d3e83cfcb56f2679c5cee2c9efa0a241ac3132ca4edaceba50311
+Iniciou o container em modo backgraound.
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                  NAMES
+0e3e2994e17d        nginx               "/docker-entrypoint.…"   About a minute ago   Up About a minute   0.0.0.0:8080->80/tcp   ex-daemon-basic
+
+Gerenciar container em modo backgraound:
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container start ex-daemon-basic
+ex-daemon-basic
+Iniciamos o container
+
+Para reiniciar o container:
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container restart ex-daemon-basic
+ex-daemon-basic
+
+Para parar o container:
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>docker container stop ex-daemon-basic
+ex-daemon-basic
+
+Podemos usar também o container/ID: 0e3e2994e17d. Tem a mesma função no local do nome.
+
+Manipulação de container em modo daemon:
+Comandos para ter acesso aos containers:
+
+docker container ls
+
+docker container list
+
+docker container ps
+
+C:\Users\Aldo\Desktop>docker container ls
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+C:\Users\Aldo\Desktop>docker container list
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+C:\Users\Aldo\Desktop>docker container ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+Podemos acessar as logs de um container, 
+
+docker container start ex-daemon-basic, iniciamos um container.
+
+C:\Users\Aldo\Desktop>docker container start ex-daemon-basic
+ex-daemon-basic
+
+Para acessar os logs digitamos o comando com o nome do container:
+docker container logs ex-daemon-basic
+
+C:\Users\Aldo\Desktop>docker container logs ex-daemon-basic
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+172.17.0.1 - - [22/Nov/2020:20:15:03 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" "-"
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: error: IPv6 listen already enabled
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+172.17.0.1 - - [22/Nov/2020:20:20:18 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" "-"
+172.17.0.1 - - [22/Nov/2020:20:20:40 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" "-"
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: error: IPv6 listen already enabled
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: error: IPv6 listen already enabled
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+172.17.0.1 - - [23/Nov/2020:21:06:53 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
+AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" "-"
+
+Para inspesionar, usamos o comando mais o nome do container.
+
+docker container inspect ex-daemon-basic
+
+Vai apresentar em um formato json várias caracteristicas do container, 
 
 
+docker container exec ex-daemon-basic uname -or; apresenta qual o tipo de sistema que executa o container.
 
+C:\Users\Aldo\Desktop>docker container exec ex-daemon-basic uname -or
+4.19.128-microsoft-standard GNU/Linux
 
+Nova sintaxe do Docker Client:
+docker container ls
+docker image ls
 
+C:\Users\Aldo\Desktop>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+nginx               latest              C:\Users\Aldo\Desktop>docker volume ls
+DRIVER              VOLUME NAME        5 days ago          133MB
+debian              latest              ef05c61d5112        6 days ago          114MB
+hello-world         latest              bf756fb1ae65        10 months ago       13.3kB
 
+C:\Users\Aldo\Desktop>docker volume ls
+DRIVER              VOLUME NAME
+Para listar os volumes criados na maquina local, 
 
+Para apagar uma imgem, digitamos o camando e o ID da imagem:
+docker rmi bf756fb1ae65 - remo imagem
 
-
-
-
-
-
+docker rm bf756fb1ae65 - remove container (usando o id do container)
 
 
 
