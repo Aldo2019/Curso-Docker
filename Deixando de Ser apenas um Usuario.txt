@@ -75,3 +75,51 @@ docker image push - para publicar uma imagem
 docker hub x docker registry:
 registry: para registro e obtenção de imagens
 hub;sas um produto de cloud disponizado pelo docker sendo possível registrar imagens criadas
+
+Contrução de Imagens:
+Pode-se utilizar o VScode e usar o terminal para chamar a imagem.
+
+C:\Users\Aldo\Desktop>cd curso-docker
+
+C:\Users\Aldo\Desktop\curso-docker>cd primeiro build
+O sistema não pode encontrar o caminho especificado.
+
+C:\Users\Aldo\Desktop\curso-docker>cd ex-volume
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>cd primeiro build
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume\primeiro build>docker image build -t ex-simple-build .
+Sending build context to Docker daemon  2.048kB
+Step 1/2 : FROM nginx:latest
+ ---> daee903b4e43
+Step 2/2 : RUN echo '<h1> Oi </h1>' /usr/share/nginx/html/index.html
+ ---> Running in 635b9d5d8174
+<h1> Oi </h1> /usr/share/nginx/html/index.html
+Removing intermediate container 635b9d5d8174
+ ---> 9319173b8a1f
+Successfully built 9319173b8a1f
+Successfully tagged ex-simple-build:latest
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. 
+All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to 
+double check and reset permissions for sensitive files and directories.
+
+Verificamos se a imagem foi criada:
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume\primeiro build>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+ex-simple-build     latest              9319173b8a1f        About a minute ago   133MB
+nginx               latest              daee903b4e43        6 days ago           133MB
+debian              latest              ef05c61d5112        6 days ago           114MB
+hello-world         latest              bf756fb1ae65        10 months ago        13.3kB
+
+Rodamos a imagem:
+docker container run -p 80:80 ex-simple-build
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume\primeiro build>docker container run -p 80:80 ex-simple-build
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
