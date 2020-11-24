@@ -1,0 +1,125 @@
+Iniciamos com comando para portabilidade de ambiente, construção de imagens, e outras funções.
+
+Diferença entre container e imagem:
+Imagem = Classe
+Container = Objeto
+
+Para os comandos de imagem: docker image --help
+Para comandos de container: docker container --help
+Para comandos de volume: docker volume --help
+
+Entendendo melhor as imgens:
+Para instalar um imgem especifica usamos o nome da imagem:latest,
+docker image pull redis:latest
+
+C:\Users\Aldo\Desktop>docker image pull redis:latest
+latest: Pulling from library/redis
+852e50cd189d: Already exists
+76190fa64fb8: Pull complete
+9cbb1b61e01b: Pull complete
+d048021f2aae: Pull complete
+6f4b2af24926: Pull complete
+1cf1d6922fba: Pull complete
+Digest: sha256:5b98e32b58cdbf9f6b6f77072c4915d5ebec43912114031f37fa5fa25b032489
+Status: Downloaded newer image for redis:latest
+docker.io/library/redis:latest
+
+C:\Users\Aldo\Desktop>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+redis               latest              74d107221092        5 days ago          104MB
+nginx               latest              daee903b4e43        5 days ago          133MB
+debian              latest              ef05c61d5112        6 days ago          114MB
+hello-world         latest              bf756fb1ae65        10 months ago       13.3kB
+
+Para criar outra imagem da mesma aplicação usamos a tag (nome) da imagem:
+docker image tag redis:latest aldo-redis
+
+C:\Users\Aldo\Desktop>docker image tag redis:latest aldo-redis
+
+C:\Users\Aldo\Desktop>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+aldo-redis          latest              74d107221092        5 days ago          104MB
+redis               latest              74d107221092        5 days ago          104MB
+nginx               latest              daee903b4e43        5 days ago          133MB
+debian              latest              ef05c61d5112        6 days ago          114MB
+hello-world         latest              bf756fb1ae65        10 months ago       13.3kB
+
+Para excluir as duas: docker image rm redis:latest aldo-redis
+
+C:\Users\Aldo\Desktop>docker image rm redis:latest aldo-redis
+Untagged: redis:latest
+Untagged: redis@sha256:5b98e32b58cdbf9f6b6f77072c4915d5ebec43912114031f37fa5fa25b032489
+Untagged: aldo-redis:latest
+Deleted: sha256:74d107221092875724ddb06821416295773bee553bbaf8d888ababe9be7b947f
+Deleted: sha256:d951b383737320b4e1ac7f9bb63f3919bcf25363ccb59fbb52a41e45ba70ffdd
+Deleted: sha256:d3b2581a1c92973ee9a41fc00e5628047ce7e644a66240fb859b38831bd525b4
+Deleted: sha256:a447231da503a58432b4d7409980139206fdf398fbde189d8a7229dd0663f472
+Deleted: sha256:f786204ca260bcaef3d47ecad10821878028239072c65ceb2a1f212f275f9367
+Deleted: sha256:b68afce5f52461f79be59806be00e43ea95152a0358b8dc5de9ac3f486a70d7e
+
+C:\Users\Aldo\Desktop>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+nginx               latest              daee903b4e43        5 days ago          133MB
+debian              latest              ef05c61d5112        6 days ago          114MB
+hello-world         latest              bf756fb1ae65        10 months ago       13.3kB
+
+Comandos básicos para gerenciamento de imagens:
+docker image pull - baixar uma imagem do docker hub
+docker image ls - para listar as imagens
+docker image rm - para remover uma imagem
+docker image inspect - para inspecionar uma imagem com resposta em json
+docker image tag - passamos dois parametros (1 imagem de origem) (2 nome da tag para a imagem)
+docker image build - para construir uma imagem 
+docker image push - para publicar uma imagem
+
+docker hub x docker registry:
+registry: para registro e obtenção de imagens
+hub;sas um produto de cloud disponizado pelo docker sendo possível registrar imagens criadas
+
+Contrução de Imagens:
+Pode-se utilizar o VScode e usar o terminal para chamar a imagem.
+
+C:\Users\Aldo\Desktop>cd curso-docker
+
+C:\Users\Aldo\Desktop\curso-docker>cd primeiro build
+O sistema não pode encontrar o caminho especificado.
+
+C:\Users\Aldo\Desktop\curso-docker>cd ex-volume
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume>cd primeiro build
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume\primeiro build>docker image build -t ex-simple-build .
+Sending build context to Docker daemon  2.048kB
+Step 1/2 : FROM nginx:latest
+ ---> daee903b4e43
+Step 2/2 : RUN echo '<h1> Oi </h1>' /usr/share/nginx/html/index.html
+ ---> Running in 635b9d5d8174
+<h1> Oi </h1> /usr/share/nginx/html/index.html
+Removing intermediate container 635b9d5d8174
+ ---> 9319173b8a1f
+Successfully built 9319173b8a1f
+Successfully tagged ex-simple-build:latest
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. 
+All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to 
+double check and reset permissions for sensitive files and directories.
+
+Verificamos se a imagem foi criada:
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume\primeiro build>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+ex-simple-build     latest              9319173b8a1f        About a minute ago   133MB
+nginx               latest              daee903b4e43        6 days ago           133MB
+debian              latest              ef05c61d5112        6 days ago           114MB
+hello-world         latest              bf756fb1ae65        10 months ago        13.3kB
+
+Rodamos a imagem:
+docker container run -p 80:80 ex-simple-build
+
+C:\Users\Aldo\Desktop\curso-docker\ex-volume\primeiro build>docker container run -p 80:80 ex-simple-build
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
