@@ -165,7 +165,9 @@ Removing intermediate container 851163de035d
  ---> ea44b7868228
 Successfully built ea44b7868228
 Successfully tagged ex-build-arg:latest
-SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. All files and directories added to build context will have '-rwxr-xr-x' permissions. It is recommended to double check and reset permissions for sensitive files and directories.
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. 
+All files and directories added to build context will have '-rwxr-xr-x' permissions. 
+It is recommended to double check and reset permissions for sensitive files and directories.
 
 C:\Users\Aldo\Desktop\curso-docker\build-com-arg>docker container run ex-build-arg bash -c 'echo $S3_BUCKET'
 $S3_BUCKET': -c: line 0: unexpected EOF while looking for matching `''
@@ -179,8 +181,61 @@ Usage:  docker image inspect [OPTIONS] IMAGE [IMAGE...]
 
 Display detailed information on one or more images
 
-C:\Users\Aldo\Desktop\curso-docker\build-com-arg>docker image inspect --format="{{index .Config.Labels \"maintainer\"}}" ex-build-arg
+C:\Users\Aldo\Desktop\curso-docker\build-com-arg>docker image inspect --format="{{index .Config.Labels \"maintainer\"}}" 
+ex-build-arg
 Aldo Faria Costa <www.cozinhandocomhelenapereira.com.br>
 
 Uso das Instruções de Povoamento:
+
+C:\Users\Aldo\Desktop\curso-docker\build-com-copy>ls
+'ls' não é reconhecido como um comando interno
+ou externo, um programa operável ou um arquivo em lotes.
+
+C:\Users\Aldo\Desktop\curso-docker\build-com-copy>dir
+ O volume na unidade C não tem nome.
+ O Número de Série do Volume é 5A6A-920E
+
+ Pasta de C:\Users\Aldo\Desktop\curso-docker\build-com-copy
+
+25/11/2020  07:33    <DIR>          .
+25/11/2020  07:33    <DIR>          ..
+25/11/2020  07:38               207 Dockerfile
+25/11/2020  07:33                47 index.html
+               2 arquivo(s)            254 bytes
+               2 pasta(s)   30.964.023.296 bytes disponíveis
+
+C:\Users\Aldo\Desktop\curso-docker\build-com-copy>docker image build -t ex-build-copy .
+Sending build context to Docker daemon  3.072kB
+Step 1/4 : FROM nginx:latest
+ ---> daee903b4e43
+Step 2/4 : LABEL maintainer 'Aldo Faria Costa <www.cozinhandocomhelenapereira.com.br>'
+ ---> Running in 81adaf471f42
+Removing intermediate container 81adaf471f42
+ ---> accd3ef1ba20
+Step 3/4 : RUN echo '<h1> Sem Conteúdo </h1>' > /usr/share/nginx/html/conteudo.html
+ ---> Running in 2c8d99bcda9e
+Removing intermediate container 2c8d99bcda9e
+ ---> 8b3bbd69760d
+Step 4/4 : COPY *.html /usr/share/nginx/html/
+ ---> 54afca15589a
+Successfully built 54afca15589a
+Successfully tagged ex-build-copy:latest
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host.
+ All files and directories added to build context will have '-rwxr-xr-x' permissions. 
+ It is recommended to double check and reset permissions for sensitive files and directories.
+
+C:\Users\Aldo\Desktop\curso-docker\build-com-copy>docker container run -p 80:80 ex-build-copy
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+10-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+10-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 in /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete; ready for start up
+172.17.0.1 - - [25/Nov/2020:21:25:00 +0000] "GET / HTTP/1.1" 200 47 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+ AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" "-"
+172.17.0.1 - - [25/Nov/2020:21:25:09 +0000] "GET /conteudo.html HTTP/1.1" 200 25 "http://localhost/" "Mozilla/5.0 
+(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36" "-"
+
+Uso das instruções para execução do container:
 
