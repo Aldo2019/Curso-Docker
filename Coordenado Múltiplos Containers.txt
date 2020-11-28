@@ -1,4 +1,5 @@
 Docker compose para referenciar vários containers e gerenciar todos os serviços, iniciamos o exemplo
 com 3 serviços distintos em containers distintos.
 
+Configurando o ambiente com o compose:
 
