@@ -239,3 +239,150 @@ C:\Users\Aldo\Desktop\curso-docker\build-com-copy>docker container run -p 80:80 
 
 Uso das instruções para execução do container:
 
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image build -t ex-build-dev .
+Sending build context to Docker daemon  4.608kB
+Step 1/9 : FROM python:3.6
+3.6: Pulling from library/python
+756975cb9c7e: Already exists
+d77915b4e630: Pull complete
+5f37a0a41b6b: Pull complete
+96b2c1e36db5: Pull complete
+c495e8de12d2: Pull complete
+a79e1025c0fe: Pull complete
+f1f619b13c7c: Pull complete
+1f74591d7ee0: Pull complete
+6b75eb5b17d0: Pull complete
+Digest: sha256:9f25e9df754186b4101eb96cca97a372babb2b15ba917722ff41b5706562fd94
+Status: Downloaded newer image for python:3.6
+ ---> 85146760634c
+Step 2/9 : LABEL maintaner 'Aldo Faria Costa <www.cozinhandocomhelenapereira.com.br>'
+ ---> Running in 1555129e9139
+Removing intermediate container 1555129e9139
+ ---> 05f58d0a793e
+Step 3/9 : RUN useradd www &&    mkdir /app &&    mkdir /log &&    chown www /log
+ ---> Running in ecc9f704fb2d
+Removing intermediate container ecc9f704fb2d
+ ---> f2db6af1a32e
+Step 4/9 : USER www
+ ---> Running in 7cbe26cb235d
+Removing intermediate container 7cbe26cb235d
+ ---> 5a6c21435d9c
+Step 5/9 : VOLUME /log
+ ---> Running in e6d07d33f29c
+Removing intermediate container e6d07d33f29c
+ ---> 6922d31a1b95
+Step 6/9 : WORKDIR /app
+ ---> Running in a05b02f1c4b0
+Removing intermediate container a05b02f1c4b0
+ ---> 24adb91c4cb7
+Step 7/9 : EXPOSE 8000
+ ---> Running in 2521e6a3d057
+Removing intermediate container 2521e6a3d057
+ ---> 62d922d22903
+Step 8/9 : ENTRYPOINT ["/usr/local/bin/python"]
+ ---> Running in b5221b129085
+Removing intermediate container b5221b129085
+ ---> 99291d0c9a8b
+Step 9/9 : CMD ["run.py"]
+ ---> Running in 562065b32bc7
+Removing intermediate container 562065b32bc7
+ ---> 8707ac0493cf
+Successfully built 8707ac0493cf
+Successfully tagged ex-build-dev:latest
+SECURITY WARNING: You are building a Docker image from Windows against a non-Windows Docker host. 
+All files and directories added to build context will have '-rwxr-xr-x' permissions. 
+It is recommended to double check and reset permissions for sensitive files and directories.
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker container run -it -v %cd%:/app 
+-p 80:8080 --name python-server ex-build-dev
+Traceback (most recent call last):
+  File "run.py", line 6, in <module>
+    class MyHTTPHandler(http.server.SimpleHTTPResquestHandler):
+AttributeError: module 'http.server' has no attribute 'SimpleHTTPResquestHandler'
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker container run -it --volumes-from=python-server 
+debian cat /log/http-server.log
+cat: /log/http-server.log: No such file or directory
+
+Enviar imagens para o Docker Hub: primeiro criamos uma conta no docker hub.
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image ls
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+ex-build-dev        latest              8707ac0493cf        49 minutes ago      875MB
+ex-build-copy       latest              54afca15589a        2 days ago          133MB
+ex-build-arg        latest              ea44b7868228        3 days ago          114MB
+<none>              <none>              7a54f439ef05        3 days ago          114MB
+ex-simple-build     latest              dc4a491785c1        3 days ago          133MB
+<none>              <none>              304b719bb20e        4 days ago          133MB
+<none>              <none>              9319173b8a1f        4 days ago          133MB
+python              3.6                 85146760634c        9 days ago          874MB
+nginx               latest              daee903b4e43        10 days ago         133MB
+debian              latest              ef05c61d5112        10 days ago         114MB
+hello-world         latest              bf756fb1ae65        11 months ago       13.3kB
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image tag ex-simple-build dockeraldodocker2020/simple-build:1.0
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>ls
+'ls' não é reconhecido como um comando interno
+ou externo, um programa operável ou um arquivo em lotes.
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>dir
+ O volume na unidade C não tem nome.
+ O Número de Série do Volume é 5A6A-920E
+
+ Pasta de C:\Users\Aldo\Desktop\curso-docker\build-dev
+
+26/11/2020  07:24    <DIR>          .
+26/11/2020  07:24    <DIR>          ..
+26/11/2020  07:34               284 Dockerfile
+26/11/2020  06:58                19 index.html
+26/11/2020  07:21               737 run.py
+               3 arquivo(s)          1.040 bytes
+               2 pasta(s)   32.561.090.560 bytes disponíveis
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image ls
+REPOSITORY                          TAG                 IMAGE ID            CREATED             SIZE
+ex-build-dev                        latest              8707ac0493cf        52 minutes ago      875MB
+ex-build-copy                       latest              54afca15589a        2 days ago          133MB
+ex-build-arg                        latest              ea44b7868228        3 days ago          114MB
+<none>                              <none>              7a54f439ef05        3 days ago          114MB
+ex-simple-build                     latest              dc4a491785c1        3 days ago          133MB
+dockeraldodocker2020/simple-build   1.0                 dc4a491785c1        3 days ago          133MB
+<none>                              <none>              304b719bb20e        4 days ago          133MB
+<none>                              <none>              9319173b8a1f        4 days ago          133MB
+python                              3.6                 85146760634c        9 days ago          874MB
+nginx                               latest              daee903b4e43        10 days ago         133MB
+debian                              latest              ef05c61d5112        10 days ago         114MB
+hello-world                         latest              bf756fb1ae65        11 months ago       13.3kB
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker login --username=aldodocker2020
+Password:
+Login Succeeded
+
+Erro:
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image push dockeraldodocker2020/simple-build:1.0
+The push refers to repository [docker.io/dockeraldodocker2020/simple-build]
+dc1cb263759e: Preparing
+b9e73ac5343e: Preparing
+5887d03dfc3d: Preparing
+e3a971c30b12: Preparing
+32048dd980c7: Preparing
+f5600c6330da: Waiting
+denied: requested access to the resource is denied
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image push aldodocker2020/simple-build:1.0
+The push refers to repository [docker.io/aldodocker2020/simple-build]
+An image does not exist locally with the tag: aldodocker2020/simple-build
+
+C:\Users\Aldo\Desktop\curso-docker\build-dev>docker image push dockeraldodocker2020/simple-build:1.0
+The push refers to repository [docker.io/dockeraldodocker2020/simple-build]
+dc1cb263759e: Preparing
+b9e73ac5343e: Preparing
+5887d03dfc3d: Preparing
+e3a971c30b12: Preparing
+32048dd980c7: Preparing
+f5600c6330da: Waiting
+denied: requested access to the resource is denied
+
+
