@@ -1,0 +1,333 @@
+Redes:
+C:\Users\Aldo\Desktop\curso-docker>docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+d58933a29caa        bridge              bridge              local
+49b917a1431c        host                host                local
+bcba6006859b        none                null                local
+
+Rede tipo None (sem Rede): docker container run -d --net none debian
+
+C:\Users\Aldo\Desktop\curso-docker>docker container run --rm alpine ash -c "ifconfig"
+Unable to find image 'alpine:latest' locally
+latest: Pulling from library/alpine
+188c0c94c7c5: Pull complete
+Digest: sha256:c0e9560cda118f9ec63ddefb4a173a2b2a0347082d7dff7dc14272e7841a5b5a
+Status: Downloaded newer image for alpine:latest
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02
+          inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:2 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:180 (180.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Rede None:
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Rede tipo Brigde:
+
+C:\Users\Aldo\Desktop\curso-docker>docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "d58933a29caa6156985c48abf4b0f15322b085b578cf63bc79aa1c8d4a749ad1",
+        "Created": "2020-11-22T17:49:21.3148362Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+
+C:\Users\Aldo\Desktop\curso-docker>docker container run -d --name container1 alpine sleep 1000
+7542653dcbd25504bdb177ce7bc902750c4290705fc64fd3d974d414830470b3
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container1 ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:03
+          inet addr:172.17.0.3  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:8 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:656 (656.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+C:\Users\Aldo\Desktop\curso-docker>docker container run -d --name container2 alpine sleep 1000
+31e5f675ec2068c2eb9d2a11248f0fd440474dd1b7081c9d2b3d827860bfa70f
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container2 ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:04
+          inet addr:172.17.0.4  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:9 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:726 (726.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Agora testamos a comunicação entre os dois containers,com o ping.
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container1 ping 172.17.0.3
+PING 172.17.0.3 (172.17.0.3): 56 data bytes
+64 bytes from 172.17.0.3: seq=0 ttl=64 time=3.539 ms
+64 bytes from 172.17.0.3: seq=1 ttl=64 time=0.068 ms
+64 bytes from 172.17.0.3: seq=2 ttl=64 time=0.073 ms
+64 bytes from 172.17.0.3: seq=3 ttl=64 time=0.100 ms
+64 bytes from 172.17.0.3: seq=4 ttl=64 time=0.074 ms
+64 bytes from 172.17.0.3: seq=5 ttl=64 time=0.078 ms
+64 bytes from 172.17.0.3: seq=6 ttl=64 time=0.121 ms
+^C
+--- 172.17.0.3 ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 0.068/0.579/3.539 ms
+
+Pode-se efetuar um ping para uma rede externa:
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container1 ping www.google.com
+PING www.google.com (172.217.162.164): 56 data bytes
+64 bytes from 172.217.162.164: seq=0 ttl=37 time=24.725 ms
+64 bytes from 172.217.162.164: seq=1 ttl=37 time=21.550 ms
+64 bytes from 172.217.162.164: seq=2 ttl=37 time=19.665 ms
+64 bytes from 172.217.162.164: seq=3 ttl=37 time=28.630 ms
+64 bytes from 172.217.162.164: seq=4 ttl=37 time=19.603 ms
+64 bytes from 172.217.162.164: seq=5 ttl=37 time=21.000 ms
+^C
+--- www.google.com ping statistics ---
+6 packets transmitted, 6 packets received, 0% packet loss
+round-trip min/avg/max = 19.603/22.528/28.630 ms
+
+Criamos uma nova rede:
+C:\Users\Aldo\Desktop\curso-docker>docker network create --driver bridge rede_nova
+cc621a8e146167a3c23f7de6dcdad9f27639170861abeb0a69e669cae12d7b77
+
+C:\Users\Aldo\Desktop\curso-docker>docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+d58933a29caa        bridge              bridge              local
+49b917a1431c        host                host                local
+bcba6006859b        none                null                local
+cc621a8e1461        rede_nova           bridge              local
+
+Temos agora duas redes em bridge, e pode-se inspecionar:
+
+C:\Users\Aldo\Desktop\curso-docker>docker network inspect rede_nova
+[
+    {
+        "Name": "rede_nova",
+        "Id": "cc621a8e146167a3c23f7de6dcdad9f27639170861abeb0a69e669cae12d7b77",
+        "Created": "2020-11-28T17:44:32.4082291Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+Criamos outro container na rede_nova:
+
+C:\Users\Aldo\Desktop\curso-docker>docker container run -d --name container3 --net rede_nova alpine sleep 1000
+3507cbdaa04832249fc7dbfbdc1a54987039bcd48ee1b3d69a7fa79f36d226f5
+
+Pode-se ver as interfaces de redes:
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container3 ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:12:00:02
+          inet addr:172.18.0.2  Bcast:172.18.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:15 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1242 (1.2 KiB)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Então IP 17 não pode pingar em IP 18:
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container3 ping 172.17.0.2
+PING 172.17.0.2 (172.17.0.2): 56 data bytes
+
+Podemos configurar o container3 para se comunicar na rede bridge:
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container3 ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:12:00:02
+          inet addr:172.18.0.2  Bcast:172.18.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:20 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1508 (1.4 KiB)  TX bytes:10514 (10.2 KiB)
+
+eth1      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02
+          inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:12 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:976 (976.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+Agora os IP´s pode-se comunicar:
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container3 ping 172.17.0.2
+PING 172.17.0.2 (172.17.0.2): 56 data bytes
+64 bytes from 172.17.0.2: seq=0 ttl=64 time=3.147 ms
+64 bytes from 172.17.0.2: seq=1 ttl=64 time=0.117 ms
+64 bytes from 172.17.0.2: seq=2 ttl=64 time=0.157 ms
+64 bytes from 172.17.0.2: seq=3 ttl=64 time=0.119 ms
+64 bytes from 172.17.0.2: seq=4 ttl=64 time=4.626 ms
+
+^C--- 172.17.0.2 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 0.117/1.633/4.626 ms
+
+Pode-se desconectar as redes:
+C:\Users\Aldo\Desktop\curso-docker>docker network disconnect bridge container3
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it contaneir3 ifconfig
+Error: No such container: contaneir3
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container3 ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:12:00:02
+          inet addr:172.18.0.2  Bcast:172.18.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:109 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1578 (1.5 KiB)  TX bytes:10514 (10.2 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:10 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:10 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:840 (840.0 B)  TX bytes:840 (840.0 B)
+
+Rede tipo host: não utiliza a ponte bridge, usa direta o host da maquina e fica sem a proteção de 
+isolamento.
+
+C:\Users\Aldo\Desktop\curso-docker>docker container run -d --name container4 --net host alpine sleep 1000
+a2457bd44081ec3e06f34a51c97f1925f2d222c2e037abbce37c5750a752c0fd
+
+C:\Users\Aldo\Desktop\curso-docker>docker container exec -it container4 ifconfig
+br-cc621a8e1461 Link encap:Ethernet  HWaddr 02:42:85:DC:B3:9C
+          inet addr:172.18.0.1  Bcast:172.18.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::42:85ff:fedc:b39c/64 Scope:Link
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:109 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:8988 (8.7 KiB)  TX bytes:572 (572.0 B)
+
+docker0   Link encap:Ethernet  HWaddr 02:42:7B:38:0E:E1
+          inet addr:172.17.0.1  Bcast:172.17.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::42:7bff:fe38:ee1/64 Scope:Link
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:217 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:321 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:18514 (18.0 KiB)  TX bytes:42051 (41.0 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 02:50:00:00:00:01
+          inet addr:192.168.65.3  Bcast:192.168.65.15  Mask:255.255.255.0
+          inet6 addr: fe80::50:ff:fe00:1/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:208317 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:23327 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:312290193 (297.8 MiB)  TX bytes:1537753 (1.4 MiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:593 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:593 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:60249 (58.8 KiB)  TX bytes:60249 (58.8 KiB)
+
